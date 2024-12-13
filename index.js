@@ -2,6 +2,7 @@ const items = document.querySelectorAll(".item");
 const rsButton = document.querySelector(".reset-btn");
 const startButton = document.querySelector(".start-btn");
 const results = document.querySelectorAll(".results .result img");
+const resultNotification = document.querySelector(".resultNotification");
 let playerChoices = [];
 const maxBets = 3;
 const images = ["bau", "ca", "cua", "ga", "huou", "tom"];
@@ -17,7 +18,6 @@ items.forEach((item) => {
             counter.textContent = currentCount + 1;
             totalBets++;
             playerChoices.push(item.getAttribute('data-name'));
-            console.log(playerChoices);
         }
 
         if (totalBets >= maxBets) {
@@ -51,8 +51,13 @@ startButton.addEventListener("click", () => {
                 result.setAttribute("src", `./Assets/${randomResults[index]}.png`);
             });
 
-            console.log(playerChoices.values());
-            // console.log(randomResults.every(choice => playerChoices.includes(choice)));
+            const isWinner = playerChoices.every(choice => randomResults.includes(choice));
+            if (isWinner) {
+                resultNotification.textContent = `Chúc mừng! Bạn thắng rồi, kết quả là: ${randomResults.join("- ").toUpperCase()}`;
+            } else {
+                resultNotification.textContent = `Chúc bạn may mắn lần sau, kết quả là: ${randomResults.join("- ").toUpperCase()}`;
+            }
+
         }
     }, 150)
     
@@ -61,6 +66,7 @@ startButton.addEventListener("click", () => {
 rsButton.addEventListener("click", () => {
     totalBets = 0;
     playerChoices = [];
+    resultNotification.textContent = "";
     items.forEach((item) => {
         item.querySelector("p").textContent = 0;
         item.style.border = "1px solid black";
